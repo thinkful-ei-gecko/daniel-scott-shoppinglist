@@ -12,10 +12,18 @@
     <div class="container">
         <h1>Shopping List</h1>
         <form id="js-shopping-list-form">
-            <label for="shopping-list-entry">Add an item</label>
+            <label for="shopping-list-entry"></label>
             <input type="text" name="shopping-list-entry" class="js-shopping-list-entry" placeholder="e.g., broccoli">
-            <button type="submit">Add item</button>
+            <button type="submit" class="add-item-button">Add item</button>
         </form>
+
+        <div class="search">
+            <form id="search-form">
+                <input type="text" name="search-field" id="search-field" class="search-field" placeholder="e.g., kumquat">
+                <label for="search-field"></label>
+                <button type="submit" class="search-button">Search</button>
+        </form>
+        </div>
 
         <div class="filter-options">
             <input type="checkbox" name="hide-checked" id="hide-checked" class="js-hide-checked">

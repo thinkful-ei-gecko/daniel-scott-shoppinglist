@@ -8,7 +8,7 @@ const STORE = {
     {id: cuid(), name: "bread", checked: false}
   ],
   hideCompleted: false,
-  seachTerm: '',
+  searchTerm: '',
 };
 
 
@@ -22,6 +22,9 @@ function generateItemElement(item) {
         </button>
         <button class="shopping-item-delete js-item-delete">
             <span class="button-label">delete</span>
+        </button>
+        <button class="shopping-item-edit js-item-edit">
+          <span class="button-label">edit</span>
         </button>
       </div>
     </li>`;
@@ -39,14 +42,17 @@ function generateShoppingItemsString(shoppingList) {
 
 function renderShoppingList() {
   // render the shopping list in the DOM
-  console.log('`renderShoppingList` ran');
 
   let filteredItems = STORE.items;
 
   if (STORE.hideCompleted) {
     filteredItems = filteredItems.filter(x => !x.checked)
   }
-  console.log(filteredItems)
+
+  if (STORE.searchTerm !== '') {
+    filteredItems = [filteredItems.find(x => x.name === STORE.searchTerm)];
+  }
+
 
   const shoppingListItemsString = generateShoppingItemsString(filteredItems);
 
@@ -56,14 +62,12 @@ function renderShoppingList() {
 
 
 function addItemToShoppingList(itemName) {
-  console.log(`Adding "${itemName}" to shopping list`);
   STORE.items.push({id: cuid(), name: itemName, checked: false});
 }
 
 function handleNewItemSubmit() {
   $('#js-shopping-list-form').submit(function(event) {
     event.preventDefault();
-    console.log('`handleNewItemSubmit` ran');
     const newItemName = $('.js-shopping-list-entry').val();
     $('.js-shopping-list-entry').val('');
     addItemToShoppingList(newItemName);
@@ -72,7 +76,6 @@ function handleNewItemSubmit() {
 }
 
 function toggleCheckedForListItem(itemId) {
-  console.log("Toggling checked property for item with id " + itemId);
   const item = STORE.items.find(item => item.id === itemId);
   item.checked = !item.checked;
 }
@@ -86,7 +89,6 @@ function getItemIdFromElement(item) {
 
 function handleItemCheckClicked() {
   $('.js-shopping-list').on('click', `.js-item-toggle`, event => {
-    console.log('`handleItemCheckClicked` ran');
     const id = getItemIdFromElement(event.currentTarget);
     toggleCheckedForListItem(id);
     renderShoppingList();
@@ -112,23 +114,37 @@ function toggleHideFilter() {
 
 function handleHideFilter() {
   $('.js-hide-checked').on('click', ()=> {
-    console.log('hi');
     toggleHideFilter();
     renderShoppingList();
   })
 }
 
+function setSearchTerm(searchInput) {
+  STORE.searchTerm = searchInput;
+}
 
+function handleSearchSubmit() {
+  $('#search-form').on('submit', event => {
+    event.preventDefault();
+    setSearchTerm($('.search-field').val());
+    $('.search-field').val('');
+    renderShoppingList();
+  })
+}
 
+function updateItemName(itemId, newName) {
+  let item = STORE.items.find(item => item.id === itemId);
+  item.name = newName;
+}
 
-
-
-
-
-
-
-
-
+function handleNameUpdate() {
+  $('.js-item-edit').on('click', event => {
+    let id = getItemIdFromElement(event.currentTarget);
+    let name = window.prompt('please edit the selected item');
+    updateItemName(id, name);
+    renderShoppingList();
+  })
+}
 
 // this function will be our callback when the page loads. it's responsible for
 // initially rendering the shopping list, and activating our individual functions
@@ -140,6 +156,8 @@ function handleShoppingList() {
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleHideFilter();
+  handleSearchSubmit();
+  handleNameUpdate();
 }
 
 // when the page loads, call `handleShoppingList`
