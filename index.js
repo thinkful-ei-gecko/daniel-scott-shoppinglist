@@ -139,6 +139,7 @@ function updateItemName(itemId, newName) {
 
 function handleNameUpdate() {
   $('.js-item-edit').on('click', event => {
+    console.log('in edit handler');
     let id = getItemIdFromElement(event.currentTarget);
     let name = window.prompt('please edit the selected item');
     updateItemName(id, name);
@@ -150,6 +151,7 @@ function handleNameUpdate() {
 // initially rendering the shopping list, and activating our individual functions
 // that handle new item submission and user clicks on the "check" and "delete" buttons
 // for individual shopping list items.
+
 function handleShoppingList() {
   renderShoppingList();
   handleNewItemSubmit();
@@ -158,6 +160,7 @@ function handleShoppingList() {
   handleHideFilter();
   handleSearchSubmit();
   handleNameUpdate();
+
 }
 
 // when the page loads, call `handleShoppingList`
