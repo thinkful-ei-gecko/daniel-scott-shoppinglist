@@ -138,8 +138,7 @@ function updateItemName(itemId, newName) {
 }
 
 function handleNameUpdate() {
-  $('.js-item-edit').on('click', event => {
-    console.log('in edit handler');
+  $('.js-shopping-list').on('click', '.js-item-edit', event => {
     let id = getItemIdFromElement(event.currentTarget);
     let name = window.prompt('please edit the selected item');
     updateItemName(id, name);
@@ -160,7 +159,6 @@ function handleShoppingList() {
   handleHideFilter();
   handleSearchSubmit();
   handleNameUpdate();
-
 }
 
 // when the page loads, call `handleShoppingList`
